@@ -91,6 +91,8 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.opt.number = true
 vim.opt.relativenumber = true
+vim.opt.title = true
+vim.opt.titlestring = "nvim - " .. vim.fn.getcwd()
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
