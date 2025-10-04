@@ -4,6 +4,7 @@ return {
     event = 'VimEnter',
     version = '1.*',
     dependencies = {
+      "giuxtaposition/blink-cmp-copilot",
       -- Snippet Engine
       {
         'L3MON4D3/LuaSnip',
@@ -73,12 +74,35 @@ return {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
         documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        autocomplete = true,
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' , 'copilot' },
+        -- Order here determines the default presentation order
+        default = { 'lsp', 'snippets', 'path', 'lazydev', 'buffer', 'copilot' },
         providers = {
-          lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+          lsp = {
+            name = 'lsp',
+            score_offset = 1000, -- Highest priority for LSP
+          },
+          snippets = {
+            name = 'snippets',
+            score_offset = 800, -- Second priority
+          },
+          path = {
+            name = 'path',
+            score_offset = 600, -- Third priority
+          },
+          lazydev = {
+            module = 'lazydev.integrations.blink',
+            score_offset = 400, -- Fourth priority
+          },
+          copilot = {
+            name = 'copilot',
+            module = 'blink-cmp-copilot',
+            score_offset = 0, -- Lowest priority
+            async = true,
+          },
         },
       },
 
@@ -91,7 +115,8 @@ return {
       -- the rust implementation via `'prefer_rust_with_warning'`
       --
       -- See :h blink-cmp-config-fuzzy for more information
-      fuzzy = { implementation = 'lua' },
+      -- fuzzy = { implementation = 'lua' },
+      fuzzy = { implementation = 'prefer_rust_with_warning' },
 
       -- Shows a signature help window while you type arguments for a function
       signature = { enabled = true },
